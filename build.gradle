@@ -1,0 +1,55 @@
+/*
+ * Build file for jpalmyra
+ * 
+ */
+
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply from: './dependencies.gradle'
+
+group = 'com.palmyralabs.palmyra'
+
+version = '0.2.0'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    options.debug = true;
+    options.debugOptions.debugLevel = 'source,lines,vars'
+}
+
+dependencies {
+
+	compileOnly 'org.projectlombok:lombok:1.18.30'	
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	implementation deps.log.slf4j.api 
+    implementation deps.jackson.annotations
+    implementation deps.jackson.core
+    implementation deps.jackson.databind
+    implementation deps.apache.http.client
+    implementation deps.apache.commons.codec
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    if (project.hasProperty("localRepo")){
+        repositories {
+            maven {
+                url = uri("${localRepo}")
+            }
+        }
+    }
+}
