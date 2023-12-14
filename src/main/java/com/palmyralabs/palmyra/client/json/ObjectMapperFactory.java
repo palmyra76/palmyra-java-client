@@ -24,10 +24,10 @@ public class ObjectMapperFactory {
 		dateTimeModule.addSerializer(LocalDate.class,
 				new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-		dateTimeModule.addDeserializer(LocalDateTime.class,
-				new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-ddThh:mm:ss")));
-		dateTimeModule.addSerializer(LocalDateTime.class,
-				new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-ddThh:mm:ss")));
+//		dateTimeModule.addDeserializer(LocalDateTime.class,
+//				new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-ddThh:mm:ss")));
+//		dateTimeModule.addSerializer(LocalDateTime.class,
+//				new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-ddThh:mm:ss")));
 
 		objectMapper.registerModule(dateTimeModule);
 	}
