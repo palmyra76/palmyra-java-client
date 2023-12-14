@@ -17,7 +17,7 @@ import com.palmyralabs.palmyra.client.pojo.TupleMetaInfo;
 public class TupleDeserializer extends StdDeserializer<TupleImpl> {
 	private static final long serialVersionUID = 1L;
 	private static final String TUPLE_ID = "id";
-	private static final ObjectMapper objectMapper = new ObjectMapper();
+	private static final ObjectMapper objectMapper = ObjectMapperFactory.getMapper();
 
 	public TupleDeserializer() {
 		this(null);

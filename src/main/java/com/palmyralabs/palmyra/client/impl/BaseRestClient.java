@@ -24,9 +24,9 @@ import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmyralabs.palmyra.client.exception.ClientException;
+import com.palmyralabs.palmyra.client.json.ObjectMapperFactory;
 import com.palmyralabs.palmyra.client.pojo.FilterCriteria;
 
 /**
@@ -36,11 +36,7 @@ import com.palmyralabs.palmyra.client.pojo.FilterCriteria;
 public abstract class BaseRestClient {
 	private static CloseableHttpClient httpclient = HttpClientProvider.getClient();
 	private static final Logger logger = LoggerFactory.getLogger(BaseRestClient.class);
-	private static final ObjectMapper objectMapper = new ObjectMapper();
-
-	static {
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
+	private final ObjectMapper objectMapper = ObjectMapperFactory.getMapper();
 
 	protected abstract void setAuthentication(HttpMessage request);
 
@@ -80,7 +76,7 @@ public abstract class BaseRestClient {
 			for (Entry<String, String> entry : filter.getCriteria().entrySet()) {
 				builder.addParameter(entry.getKey(), entry.getValue());
 			}
-		}		
+		}
 
 		return execute(builder.build(), responseHandler);
 	}

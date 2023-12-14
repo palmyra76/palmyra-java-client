@@ -24,10 +24,10 @@ public class TupleSerializer extends StdSerializer<Tuple> {
 	@Override
 	public void serialize(Tuple value, JsonGenerator gen, SerializerProvider provider)
 	        throws IOException{		
-		writeTuple(value, gen);
+		writeTuple(value, gen, provider);
 	}
 	
-	private void writeTuple(Tuple value, JsonGenerator gen) throws IOException{
+	private void writeTuple(Tuple value, JsonGenerator gen, SerializerProvider provider) throws IOException{
 		gen.writeStartObject();
         
 		if(null != value.getId())
@@ -37,14 +37,15 @@ public class TupleSerializer extends StdSerializer<Tuple> {
     
         HashMap<String, Object> attributes = value.getAttributes();
         for(Entry<String, Object> attribute : attributes.entrySet()) {
-        	if(null != attribute.getValue())
-        		gen.writeObjectField(attribute.getKey(), attribute.getValue());	
+        	if(null != attribute.getValue()) {
+        		provider.defaultSerializeField(attribute.getKey(), attribute.getValue(), gen);
+        	}
         }
         
         HashMap<String, Tuple> parent = value.getParent();
         for(Entry<String, Tuple> attribute : parent.entrySet()) {
         	gen.writeFieldName(attribute.getKey());
-        	writeTuple(attribute.getValue(), gen);	
+        	writeTuple(attribute.getValue(), gen, provider);	
         }
 
         HashMap<String, List<Tuple>> children = value.getChildren();
@@ -53,7 +54,7 @@ public class TupleSerializer extends StdSerializer<Tuple> {
         	gen.writeFieldName(attribute.getKey());
         	gen.writeStartArray();
         	for(Tuple child:list) {
-        		writeTuple(child, gen);
+        		writeTuple(child, gen, provider);
         	}
         	gen.writeEndArray();
         }

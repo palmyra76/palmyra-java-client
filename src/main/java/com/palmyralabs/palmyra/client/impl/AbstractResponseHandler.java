@@ -15,13 +15,13 @@ import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmyralabs.palmyra.client.exception.ApplicationException;
 import com.palmyralabs.palmyra.client.exception.BadRequestException;
 import com.palmyralabs.palmyra.client.exception.ClientException;
 import com.palmyralabs.palmyra.client.exception.ServerErrorException;
 import com.palmyralabs.palmyra.client.exception.UnAuthorizedException;
+import com.palmyralabs.palmyra.client.json.ObjectMapperFactory;
 import com.palmyralabs.palmyra.client.pojo.ResultSetImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public abstract class AbstractResponseHandler<D> implements HttpClientResponseHandler<D> {
 	private final String url;
-	protected static final ObjectMapper objectMapper = new ObjectMapper();
-
-	static {
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
-
+	protected static final ObjectMapper objectMapper = ObjectMapperFactory.getMapper();
 
 	@SuppressWarnings("unchecked")
 	protected HttpEntity processHttpCode(ClassicHttpResponse response) throws IOException {		

@@ -33,23 +33,28 @@ dependencies {
 	implementation deps.log.slf4j.api 
     implementation deps.jackson.annotations
     implementation deps.jackson.core
+    implementation deps.jackson.jsr310
     implementation deps.jackson.databind
     implementation deps.apache.http.client
     implementation deps.apache.commons.codec
 }
 
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-    if (project.hasProperty("localRepo")){
-        repositories {
-            maven {
-                url = uri("${localRepo}")
-            }
-        }
-    }
-}
+
+	java {
+	    withSourcesJar()
+	}
+		
+	
+	publishing {
+	  publications {
+	    maven(MavenPublication) {
+	      from components.java
+	    }
+	  }
+	}
+  
+  	task sourceJar(type: Jar) {
+		archiveClassifier = "sources"
+		from sourceSets.main.allJava
+	}
