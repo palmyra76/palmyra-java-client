@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public abstract class AbstractResponseHandler<D> implements HttpClientResponseHandler<D> {
 	private final String url;
-	protected static final ObjectMapper objectMapper = ObjectMapperFactory.getMapper();
+	protected final ObjectMapper objectMapper = ObjectMapperFactory.getMapper();
 
 	@SuppressWarnings("unchecked")
 	protected HttpEntity processHttpCode(ClassicHttpResponse response) throws IOException {		
