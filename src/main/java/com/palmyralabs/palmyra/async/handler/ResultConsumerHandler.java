@@ -2,7 +2,6 @@ package com.palmyralabs.palmyra.async.handler;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JavaType;
@@ -14,12 +13,12 @@ import com.palmyralabs.palmyra.client.pojo.ResultSetImpl;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ResultConsumerHandler<R> extends AbstractResponseHandler<List<R>> {
-	private final Consumer<List<R>> consumer;
+public class ResultConsumerHandler<R> extends AbstractResponseHandler<ResultSet<R>> {
+	private final Consumer<ResultSet<R>> consumer;
 	private final Class<R> type;
 
-	public void accept(List<R> arg0) {
-		this.consumer.accept(arg0);
+	public void accept(ResultSet<R> d) {
+		this.consumer.accept(d);
 	}
 
 	@Override

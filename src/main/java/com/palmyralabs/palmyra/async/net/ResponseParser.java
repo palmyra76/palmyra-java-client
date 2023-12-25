@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.SimpleType;
 import com.palmyralabs.palmyra.async.FailedResponse;
 import com.palmyralabs.palmyra.async.ResponseHandler;
 import com.palmyralabs.palmyra.async.ResponseListener;
@@ -41,7 +42,7 @@ public class ResponseParser<R> implements Consumer<HttpResponse<InputStream>> {
 			if (null != listener)
 				listener.onResponse();
 		} catch (Throwable t) {
-
+			
 		}
 	}
 
@@ -76,7 +77,6 @@ public class ResponseParser<R> implements Consumer<HttpResponse<InputStream>> {
 	@SneakyThrows
 	private R parseResponse(HttpResponse<InputStream> t) {
 		ObjectMapper objectMapper = ObjectMapperFactory.getInstance();
-
 		return (R) objectMapper.readValue(t.body(), getType());
 	}
 
@@ -85,7 +85,25 @@ public class ResponseParser<R> implements Consumer<HttpResponse<InputStream>> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public JavaType getType() {
+	private JavaType getType() {
+		Type type = handler.getType();
+		ObjectMapper objectMapper = ObjectMapperFactory.getInstance();
+
+		if (type instanceof Class)
+			return objectMapper.constructType(type);
+		else if (type instanceof SimpleType) {
+			return (JavaType) type;
+		} else if (type instanceof ParameterizedType) {
+			ParameterizedType paramType = (ParameterizedType) type;
+			return objectMapper.getTypeFactory().constructParametricType((Class) paramType.getRawType(),
+					(Class) paramType.getActualTypeArguments()[0]);
+		}
+
+		return getTypeByHandler();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public JavaType getTypeByHandler() {
 		Class<?> clazz = handler.getClass();
 		ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
 
@@ -101,26 +119,25 @@ public class ResponseParser<R> implements Consumer<HttpResponse<InputStream>> {
 			return objectMapper.getTypeFactory().constructParametricType((Class) paramType.getRawType(),
 					(Class) paramType.getActualTypeArguments()[0]);
 		}
-
 		return null;
 	}
 
-	protected Type getType(Type rawClass, Type parameter) {
-		return new ParameterizedType() {
-			@Override
-			public Type[] getActualTypeArguments() {
-				return new Type[] { parameter };
-			}
-
-			@Override
-			public Type getRawType() {
-				return rawClass;
-			}
-
-			@Override
-			public Type getOwnerType() {
-				return null;
-			}
-		};
-	}
+//	protected Type getType(Type rawClass, Type parameter) {
+//		return new ParameterizedType() {
+//			@Override
+//			public Type[] getActualTypeArguments() {
+//				return new Type[] { parameter };
+//			}
+//
+//			@Override
+//			public Type getRawType() {
+//				return rawClass;
+//			}
+//
+//			@Override
+//			public Type getOwnerType() {
+//				return null;
+//			}
+//		};
+//	}
 }

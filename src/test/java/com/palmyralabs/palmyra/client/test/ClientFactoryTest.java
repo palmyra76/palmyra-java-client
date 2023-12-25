@@ -2,9 +2,10 @@ package com.palmyralabs.palmyra.client.test;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.function.Consumer;
 
 import com.palmyralabs.palmyra.async.RequestConfig;
-import com.palmyralabs.palmyra.async.handler.AbstractResponseHandler;
+import com.palmyralabs.palmyra.async.handler.ResultConsumerHandler;
 import com.palmyralabs.palmyra.async.net.ReactiveRestClient;
 import com.palmyralabs.palmyra.client.ResultSet;
 import com.palmyralabs.palmyra.client.auth.AuthClient;
@@ -16,24 +17,16 @@ public class ClientFactoryTest {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		ReactiveRestClient client = new ReactiveRestClient(baseURL, AuthClient.NoopAuthClient);
-		
-		client.get(context + "params/definition", new AbstractResponseHandler<ResultSet<Parameter>>() {
+		Consumer<ResultSet<Parameter>> consumer = new Consumer<ResultSet<Parameter>>() {
 
 			@Override
-			public void accept(ResultSet<Parameter> o) {
-				System.out.println(o.getCount());				
+			public void accept(ResultSet<Parameter> sdf) {
+				System.out.println(sdf.getCount());
 			}
-
-		}, RequestConfig.of("example:"));
+		};
+		client.get(context + "params/definition", new ResultConsumerHandler<Parameter>(consumer, Parameter.class),
+				RequestConfig.of("example:"));
 
 		Thread.sleep(Duration.ofMinutes(5));
-	}
-}
-
-class NationalityResponseHandler extends AbstractResponseHandler<Parameter> {
-
-	@Override
-	public void accept(Parameter o) {
-		System.out.println(o.getName());
 	}
 }

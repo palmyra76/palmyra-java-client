@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.palmyralabs.palmyra.async.ListResponseHandler;
 import com.palmyralabs.palmyra.async.ReactiveClient;
 import com.palmyralabs.palmyra.async.RequestConfig;
 import com.palmyralabs.palmyra.async.ResponseHandler;
@@ -107,19 +106,5 @@ public class ReactiveHttpClient implements ReactiveClient {
 	public <R> void get(String url, ResponseHandler<R> handler, RequestConfig requestConfig) {
 		HttpRequest request = getBuilder(url, requestConfig).GET().build();
 		asyncRequest(requestConfig, request, handler);
-	}
-
-	@Override
-	public <R> void getAll(String url, ListResponseHandler<R> handler, RequestConfig requestConfig) {
-		HttpRequest request = getBuilder(url, requestConfig).GET().build();
-		asyncRequest(requestConfig, request, handler);
-	}
-
-	private <R> void asyncRequest(RequestConfig requestConfig, HttpRequest request, ListResponseHandler<R> handler) {
-		ListResponseParser<R> parser = new ListResponseParser<R>(requestConfig.getOperation(), handler);
-
-		getClient().sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
-				.thenAcceptAsync(parser, handler.getExecutor())
-				.exceptionally(handler.getHandler(requestConfig, NetRequest.of(request)));
 	}
 }
