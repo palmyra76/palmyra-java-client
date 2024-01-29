@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmyralabs.palmyra.client.exception.ApplicationException;
 import com.palmyralabs.palmyra.client.exception.BadRequestException;
 import com.palmyralabs.palmyra.client.exception.ClientException;
+import com.palmyralabs.palmyra.client.exception.ForbiddenException;
 import com.palmyralabs.palmyra.client.exception.ServerErrorException;
 import com.palmyralabs.palmyra.client.exception.UnAuthorizedException;
 import com.palmyralabs.palmyra.client.json.ObjectMapperFactory;
@@ -48,11 +49,24 @@ public abstract class AbstractResponseHandler<D> implements HttpClientResponseHa
 			log.info("Un Authorized error message from server");
 			Map<String, Object> val = null;
 			String message = toString(entity);
+			
 			try {
 				val = deserialize(message, HashMap.class);
 			} catch (Throwable e) {
+				message = "Unauthorized";
 			}
 			throw new UnAuthorizedException(val, message);
+		}
+		case HttpStatus.SC_FORBIDDEN: {
+			log.info("Forbidden error message from server");
+			Map<String, Object> val = null;
+			String message = toString(entity);
+			try {
+				val = deserialize(message, HashMap.class);
+			} catch (Throwable e) {
+				message="forbidden";
+			}
+			throw new ForbiddenException(val, message);
 		}
 		case HttpStatus.SC_INTERNAL_SERVER_ERROR: {
 			log.info("Internal Server error message from server");

@@ -1,7 +1,6 @@
 package com.palmyralabs.palmyra.client.test;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.function.Consumer;
 
 import com.palmyralabs.palmyra.async.RequestConfig;
@@ -27,6 +26,6 @@ public class ClientFactoryTest {
 		client.get(context + "params/definition", new ResultConsumerHandler<Parameter>(consumer, Parameter.class),
 				RequestConfig.of("example:"));
 
-		Thread.sleep(Duration.ofMinutes(5));
+		Thread.sleep(300 * 1000);
 	}
 }
