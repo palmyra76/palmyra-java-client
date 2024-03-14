@@ -14,7 +14,6 @@ import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmyralabs.palmyra.client.exception.ApplicationException;
 import com.palmyralabs.palmyra.client.exception.BadRequestException;
@@ -23,6 +22,7 @@ import com.palmyralabs.palmyra.client.exception.ForbiddenException;
 import com.palmyralabs.palmyra.client.exception.ServerErrorException;
 import com.palmyralabs.palmyra.client.exception.UnAuthorizedException;
 import com.palmyralabs.palmyra.client.json.ObjectMapperFactory;
+import com.palmyralabs.palmyra.client.pojo.ItemResult;
 import com.palmyralabs.palmyra.client.pojo.ResultSetImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -122,18 +122,23 @@ public abstract class AbstractResponseHandler<D> implements HttpClientResponseHa
 		return null;
 	}
 
-	protected final <T> T deserialize(String content, Class<T> valueType) throws IOException {
+	private final <T> T deserialize(String content, Class<T> valueType) throws IOException {
 		return objectMapper.readValue(content, valueType);
 	}
+//	
+//	protected final <T> T deserializeValue(HttpEntity entity, Class<T> valueType) throws IOException {
+//		return objectMapper.readValue(entity.getContent(), valueType);
+//	}
+//
+//	protected final <T> T deserialize(HttpEntity entity, TypeReference<T> valueTypeRef) throws IOException {
+//		return objectMapper.readValue(entity.getContent(), valueTypeRef);
+//	}
+
+	protected final <T> ItemResult<T> deserializeItem(HttpEntity entity, Class<T> valueType) throws IOException {
+		return objectMapper.readValue(entity.getContent(), 
+				objectMapper.constructType(getType(ItemResult.class, valueType)));
+	}
 	
-	protected final <T> T deserializeValue(HttpEntity entity, Class<T> valueType) throws IOException {
-		return objectMapper.readValue(entity.getContent(), valueType);
-	}
-
-	protected final <T> T deserialize(HttpEntity entity, TypeReference<T> valueTypeRef) throws IOException {
-		return objectMapper.readValue(entity.getContent(), valueTypeRef);
-	}
-
 	protected final <T> ArrayList<T> deserializeList(HttpEntity entity, Class<T> valueType) throws IOException {
 		return objectMapper.readValue(entity.getContent(),
 				objectMapper.getTypeFactory().constructCollectionLikeType(ArrayList.class, valueType));

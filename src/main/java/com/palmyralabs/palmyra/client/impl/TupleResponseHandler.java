@@ -7,6 +7,7 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpException;
 
 import com.palmyralabs.palmyra.client.Tuple;
+import com.palmyralabs.palmyra.client.pojo.ItemResult;
 import com.palmyralabs.palmyra.client.pojo.TupleImpl;
 
 public class TupleResponseHandler extends AbstractResponseHandler<Tuple> {
@@ -16,10 +17,11 @@ public class TupleResponseHandler extends AbstractResponseHandler<Tuple> {
 	}
 
 	@Override
-	public Tuple handleResponse(ClassicHttpResponse response) throws HttpException, IOException {		
+	public Tuple handleResponse(ClassicHttpResponse response) throws HttpException, IOException {
 		HttpEntity entity = processHttpCode(response);
 		if (null != entity) {
-			return deserializeValue(entity, TupleImpl.class);
+			ItemResult<TupleImpl> r = deserializeItem(entity, TupleImpl.class);
+			return r.getResult();
 		}
 		return null;
 	}

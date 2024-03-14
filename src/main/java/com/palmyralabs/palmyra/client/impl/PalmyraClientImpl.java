@@ -36,13 +36,13 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	@Override
 	public T findById(ID id) throws IOException {
 		String url = request.getURL(id);
-		return get(url, new ResponseHandler<T>(url, valueType));
+		return get(url, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
 	public T findUnique(FilterCriteria filter) throws IOException {
 		String url = request.getURL();
-		return get(url, filter, new ResponseHandler<T>(url, valueType));
+		return get(url, filter, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	@Override
 	public T save(T data) throws IOException {
 		String url = request.getURL();
-		return post(url, data, new ResponseHandler<T>(url, valueType));
+		return post(url, data, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
@@ -81,13 +81,13 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	@Override
 	public T save(T data, ID id) throws IOException {
 		String url = request.getURL(id);
-		return put(url, data, new ResponseHandler<T>(url, valueType));
+		return put(url, data, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
 	public T delete(ID id) throws IOException {
 		String url = request.getURL(id);
-		return delete(url, new ResponseHandler<T>(url, valueType));
+		return delete(url, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
