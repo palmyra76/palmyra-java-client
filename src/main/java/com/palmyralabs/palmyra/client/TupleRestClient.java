@@ -20,6 +20,10 @@ public interface TupleRestClient {
 	public ResultSet<Tuple> query(FilterCriteria filter) throws IOException;
 
 	public Tuple save(Tuple data) throws IOException;
+	
+	public Tuple update(Tuple data, Object id) throws IOException;
+	
+	public Tuple create(Tuple data) throws IOException;
 
 	public List<Tuple> save(List<Tuple> data) throws IOException;
 

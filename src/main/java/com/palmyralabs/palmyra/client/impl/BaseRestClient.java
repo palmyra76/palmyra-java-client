@@ -50,6 +50,14 @@ public abstract class BaseRestClient {
 		httpPost.setEntity(body);
 		return execute(httpPost, handler);
 	}
+	
+	protected <T> T save(String URL, String data, HttpClientResponseHandler<T> handler) throws IOException {
+		HttpPost httpPost = new HttpPost(URL);
+		httpPost.addHeader("action", "save");
+		StringEntity body = new StringEntity(data, ContentType.create("application/json", "UTF-8"));
+		httpPost.setEntity(body);
+		return execute(httpPost, handler);
+	}
 
 	protected <T> T put(String URL, String data, HttpClientResponseHandler<T> handler) throws IOException {
 		HttpPut httpPost = new HttpPut(URL);
@@ -93,6 +101,10 @@ public abstract class BaseRestClient {
 
 	protected <T> T post(String URL, Object data, HttpClientResponseHandler<T> handler) throws IOException {
 		return post(URL, objectMapper.writeValueAsString(data), handler);
+	}
+	
+	protected <T> T save(String URL, Object data, HttpClientResponseHandler<T> handler) throws IOException {
+		return save(URL, objectMapper.writeValueAsString(data), handler);
 	}
 
 	protected <T> T put(String URL, Object data, HttpClientResponseHandler<T> handler) throws IOException {

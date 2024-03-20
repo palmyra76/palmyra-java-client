@@ -17,9 +17,10 @@ def apache = [
 	commons: [ codec: 'commons-codec:commons-codec:1.16.0']	
 ]
 
-def log = [
-  slf4j: [ api:"org.slf4j:slf4j-api:${versions.slf4j}"
-  ]
+def org = [
+	lombok : "org.projectlombok:lombok:1.18.30",
+	slf4j: [ api:"org.slf4j:slf4j-api:${versions.slf4j}"
+	]
 ]
 
-ext.deps = [ 'jackson': jackson, 'apache': apache, 'log':log]
+ext.deps = [ 'jackson': jackson, 'apache': apache, 'org':org]

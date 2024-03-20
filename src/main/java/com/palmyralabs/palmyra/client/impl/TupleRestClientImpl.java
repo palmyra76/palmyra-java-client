@@ -46,7 +46,17 @@ public class TupleRestClientImpl extends BaseRestClient implements TupleRestClie
 
 	public Tuple save(Tuple tuple) throws IOException {
 		String url = requestURL.getURL();
+		return save(url, tuple, new TupleResponseHandler(url));
+	}
+	
+	public Tuple create(Tuple tuple) throws IOException {
+		String url = requestURL.getURL();
 		return post(url, tuple, new TupleResponseHandler(url));
+	}
+	
+	public Tuple update(Tuple tuple, Object id) throws IOException {
+		String url = requestURL.getURL(id);
+		return put(url, tuple, new TupleResponseHandler(url));
 	}
 
 	public List<Tuple> save(List<Tuple> objs) throws IOException {

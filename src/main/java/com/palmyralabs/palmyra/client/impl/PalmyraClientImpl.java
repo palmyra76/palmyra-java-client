@@ -58,9 +58,15 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	}
 
 	@Override
-	public T save(T data) throws IOException {
+	public T create(T data) throws IOException {
 		String url = request.getURL();
 		return post(url, data, new ItemResponseHandler<T>(url, valueType));
+	}
+
+	@Override
+	public T save(T data) throws IOException {
+		String url = request.getURL();
+		return save(url, data, new ItemResponseHandler<T>(url, valueType));
 	}
 
 	@Override
@@ -79,7 +85,7 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	}
 
 	@Override
-	public T save(T data, ID id) throws IOException {
+	public T update(T data, ID id) throws IOException {
 		String url = request.getURL(id);
 		return put(url, data, new ItemResponseHandler<T>(url, valueType));
 	}

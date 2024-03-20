@@ -13,7 +13,7 @@ apply from: './dependencies.gradle'
 
 group = 'com.palmyralabs.palmyra'
 
-version = '0.2.0'
+version = '0.2.1'
 sourceCompatibility = '11'
 
 repositories {
@@ -28,17 +28,20 @@ compileJava {
 dependencies {
 	api deps.jackson.annotations
     
-    implementation deps.log.slf4j.api
-    implementation deps.jackson.core
-    implementation deps.jackson.jsr310
-    implementation deps.jackson.databind
-    implementation deps.apache.http.client
-    implementation deps.apache.commons.codec
+  implementation deps.org.slf4j.api
+  implementation deps.jackson.core
+  implementation deps.jackson.jsr310
+  implementation deps.jackson.databind
+  implementation deps.apache.http.client
+  implementation deps.apache.commons.codec
+  
+  implementation 'org.slf4j:slf4j-simple:2.0.9'
     
-    implementation 'org.slf4j:slf4j-simple:2.0.9'
-    
-    compileOnly 'org.projectlombok:lombok:1.18.30'	
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'        
+  compileOnly deps.org.lombok
+	annotationProcessor deps.org.lombok
+	
+	testCompileOnly deps.org.lombok
+	testAnnotationProcessor deps.org.lombok      
 }
 
 java {

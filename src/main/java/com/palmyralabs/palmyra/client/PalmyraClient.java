@@ -20,10 +20,12 @@ public interface PalmyraClient<T, ID> {
 	public ResultSet<T> query(FilterCriteria filter) throws IOException;
 
 	public T save(T data) throws IOException;
+	
+	public T create(T data) throws IOException;
 
 	public List<T> save(List<T> data) throws IOException;
 
-	public T save(T data, ID id) throws IOException;
+	public T update(T data, ID id) throws IOException;
 
 	public T delete(ID id) throws IOException;
 
