@@ -1,31 +1,12 @@
 package com.palmyralabs.palmyra.client;
 
-import com.palmyralabs.palmyra.client.auth.AuthClient;
-import com.palmyralabs.palmyra.client.impl.PalmyraClientImpl;
-import com.palmyralabs.palmyra.client.impl.TupleRestClientImpl;
+public interface PalmyraClientFactory {
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+	<T> PalmyraClient<T, Integer> getClient(String mapping, Class<T> valueType);
 
-@RequiredArgsConstructor
-public class PalmyraClientFactory {
-	private @NonNull final String baseURL;
-	private @NonNull final String context;
-	private AuthClient authClient = AuthClient.NoopAuthClient;
+	<T> PalmyraClient<T, Integer> getClient(Class<T> valueType);
 
-	public <T> PalmyraClient<T, Integer> getClient(String mapping, Class<T> valueType) {
-		return new PalmyraClientImpl<T, Integer>(authClient, baseURL, context, valueType);
-	}
+	<T, ID> PalmyraClient<T, ID> getClient(Class<T> valueType, Class<ID> IDType);
 
-	public <T> PalmyraClient<T, Integer> getClient(Class<T> valueType) {
-		return new PalmyraClientImpl<T, Integer>(authClient, baseURL, context, valueType);
-	}
-
-	public <T, ID> PalmyraClient<T, ID> getClient(Class<T> valueType, Class<ID> IDType) {
-		return new PalmyraClientImpl<T, ID>(authClient, baseURL, context, valueType);
-	}
-
-	public TupleRestClient getTupleClient(String mapping) {
-		return new TupleRestClientImpl(authClient, baseURL, context, mapping);
-	}
+	TupleRestClient getTupleClient(String mapping);
 }

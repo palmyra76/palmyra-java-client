@@ -13,7 +13,7 @@ apply from: './dependencies.gradle'
 
 group = 'com.palmyralabs.palmyra'
 
-version = '0.2.1'
+version = '0.3.0'
 sourceCompatibility = '11'
 
 repositories {
