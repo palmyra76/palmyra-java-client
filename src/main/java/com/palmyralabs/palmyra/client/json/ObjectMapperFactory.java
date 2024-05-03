@@ -20,6 +20,7 @@ public class ObjectMapperFactory {
 
 	private ObjectMapper create() {
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.findAndRegisterModules();
 		PalmyraClientConfig config = PalmyraClientConfig.getInstance();
 
 		String datePattern = config.getDatePattern();
