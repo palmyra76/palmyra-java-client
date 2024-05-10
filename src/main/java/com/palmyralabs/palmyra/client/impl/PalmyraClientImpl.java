@@ -40,12 +40,6 @@ public class PalmyraClientImpl<T, ID> extends BaseRestClient implements PalmyraC
 	}
 
 	@Override
-	public T findUnique(FilterCriteria filter) throws IOException {
-		String url = request.getURL();
-		return get(url, filter, new ItemResponseHandler<T>(url, valueType));
-	}
-
-	@Override
 	public ResultSetImpl<T> query(FilterCriteria filter) throws IOException {
 		String url = request.getURL();
 		return get(url, filter, new ResultSetResponseHandler<T>(url, valueType));
